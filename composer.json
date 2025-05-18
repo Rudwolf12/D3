@@ -1,6 +1,26 @@
 {
     "require":{
-        "php":"^8.4"
+        "php":"8.4"
         
-    }
+    },
+    "authors": [
+        {
+            "name": "Rodolfo Pérez",
+            "email": "rudwolf12@proton.me",
+            "homepage": "https://rudwolf.github.io",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "rudwolf12@proton.me"
+    },
+    "autoload": {
+        "files": ["index.php"]
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Rudwolf12/D3"
+        }
+    ]
 }
