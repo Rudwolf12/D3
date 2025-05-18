@@ -1,39 +1,21 @@
-name: PHP Composer
-
+name: Verify that main branch is installable and usable
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-permissions:
-  contents: read
+    branches:
+      - main
 
 jobs:
-  build:
-
+  install-and-test:
+    name: Check that this is installable and usable
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
-
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
-
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
-
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
-
-    # - name: Run test suite
-    #   run: composer run-script test
+      - name: Wait for a bit before trying to fetch the new version
+        run: sleep 300
+      - name: Clear composer cache
+        run: composer clear-cache
+      - name: Require this version
+        run: composer require madewithlove/htaccess-cli:dev-${GITHUB_REF##*/}#$GITHUB_SHA --prefer-source
+      - name: Add a very basic htaccess file
+        run: echo "RewriteRule .* /foo" >> .htaccess
+      - name: Run the htaccess tester
+        run: vendor/bin/htaccess http://localhost
